@@ -7,6 +7,7 @@ export const Authentication = ({ handleCloseModal }) => {
    const [isAuthenticating, setIsAuthenticating] = useState(false)
    const [email, setEmail] = useState("")
    const [password, setPassword] = useState("")
+   const [error, setError] = useState(null)
 
    const { signup, login } = useAuth()
 
@@ -16,6 +17,8 @@ export const Authentication = ({ handleCloseModal }) => {
 
       try {
          setIsAuthenticating(true)
+         setError(null)
+
          if (isRegistration) {
             //signup
             await signup(email, password)
@@ -26,6 +29,7 @@ export const Authentication = ({ handleCloseModal }) => {
          handleCloseModal()
       } catch (error) {
          console.log(error.message);
+         setError(error.message)
       } finally {
          setIsAuthenticating(false)
       }
@@ -42,6 +46,7 @@ export const Authentication = ({ handleCloseModal }) => {
                : "Sign in to your account"
             }
          </p>
+         {error && <p className="error-message">❌ {error}</p>}
          <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
