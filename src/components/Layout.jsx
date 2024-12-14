@@ -1,15 +1,13 @@
+import Footer from "./Footer";
+import Header from "./Header";
+
 export default function Layout({ children }) {
-   const header = (
-      <header></header>
-   )
-   const footer = (
-      <footer></footer>
-   )
+
    return (
       <>
-         {header}
+         <Header />
          <main>{children}</main>
-         {footer}
+         <Footer />
       </>
    )
 }
