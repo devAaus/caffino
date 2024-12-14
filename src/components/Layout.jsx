@@ -7,11 +7,13 @@ import Modal from "./Modal";
 export default function Layout({ children }) {
    const [showModal, setShowModal] = useState(false)
 
+   const handleCloseModal = () => setShowModal(false)
+
    return (
       <>
          {showModal && (
-            <Modal handleCloseModal={() => setShowModal(false)}>
-               <Authentication handleCloseModal={() => setShowModal(false)} />
+            <Modal handleCloseModal={handleCloseModal}>
+               <Authentication handleCloseModal={handleCloseModal} />
             </Modal>
          )}
          <Header setShowModal={setShowModal} />

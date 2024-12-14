@@ -22,11 +22,13 @@ export default function CoffeeForm({ isAuthenticated }) {
       console.log(selectedCoffee, coffeeCost, hour, min)
    }
 
+   const handleCloseModal = () => setShowModal(false)
+
    return (
       <>
          {showModal && (
-            <Modal handleCloseModal={() => setShowModal(false)}>
-               <Authentication handleCloseModal={() => setShowModal(false)} />
+            <Modal handleCloseModal={handleCloseModal}>
+               <Authentication handleCloseModal={handleCloseModal} />
             </Modal>
          )}
          <div className="section-header">
