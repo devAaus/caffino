@@ -2,6 +2,9 @@ import { useState } from "react";
 import { coffeeOptions } from "../utils";
 import Modal from "./Modal";
 import { Authentication } from "./Authentication";
+import { useAuth } from "../context/AuthContext";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
 const mins = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
@@ -14,12 +17,52 @@ export default function CoffeeForm({ isAuthenticated }) {
    const [hour, setHour] = useState(0);
    const [min, setMin] = useState(0);
 
-   const handleSubmit = () => {
+   const { user, globalData, setGlobalData } = useAuth()
+
+   const handleSubmit = async () => {
       if (!isAuthenticated) {
          setShowModal(true)
          return
       }
-      console.log(selectedCoffee, coffeeCost, hour, min)
+
+      // a guard clause that only submits the form if it is completed
+      if (!selectedCoffee) {
+         return
+      }
+
+      try {
+         const newGlobalData = {
+            ...(globalData || {}),
+         }
+
+         const nowTime = Date.now()
+         const timeToSubtract = (hour * 60 * 60 * 1000) + (min * 60 * 100)
+         const timeStamp = nowTime - timeToSubtract
+
+         const newData = {
+            name: selectedCoffee,
+            cost: coffeeCost,
+         }
+         newGlobalData[timeStamp] = newData
+
+         console.log(timeStamp, selectedCoffee, coffeeCost)
+
+         // update the global data
+         setGlobalData(newGlobalData)
+
+         //persist the data in the firebase database
+         const userRef = doc(db, 'users', user.uid)
+         const res = await setDoc(userRef, {
+            [timeStamp]: newData,
+         }, { merge: true })
+
+         setSelectedCoffee(null)
+         setCoffeeCost(0)
+         setHour(0)
+         setMin(0)
+      } catch (error) {
+         console.log(error.message)
+      }
    }
 
    const handleCloseModal = () => setShowModal(false)
