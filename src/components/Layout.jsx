@@ -11,7 +11,7 @@ export default function Layout({ children }) {
       <>
          {showModal && (
             <Modal handleCloseModal={() => setShowModal(false)}>
-               <Authentication />
+               <Authentication handleCloseModal={() => setShowModal(false)} />
             </Modal>
          )}
          <Header setShowModal={setShowModal} />

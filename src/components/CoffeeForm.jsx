@@ -26,7 +26,7 @@ export default function CoffeeForm({ isAuthenticated }) {
       <>
          {showModal && (
             <Modal handleCloseModal={() => setShowModal(false)}>
-               <Authentication />
+               <Authentication handleCloseModal={() => setShowModal(false)} />
             </Modal>
          )}
          <div className="section-header">

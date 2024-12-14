@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useAuth } from "../context/AuthContext"
 
 
-export const Authentication = () => {
+export const Authentication = ({ handleCloseModal }) => {
    const [isRegistration, setIsRegistration] = useState(false)
    const [isAuthenticating, setIsAuthenticating] = useState(false)
    const [email, setEmail] = useState("")
@@ -23,6 +23,7 @@ export const Authentication = () => {
             //login
             await login(email, password)
          }
+         handleCloseModal()
       } catch (error) {
          console.log(error.message);
       } finally {
